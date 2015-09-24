@@ -8,6 +8,9 @@ void setup(){
   smooth();
   instructions();
   waves(-10, 300, 40, 40, 0, 0, PI, PI, 2*PI);
+  
+ 
+  
 
 } //setup()
 
@@ -15,15 +18,25 @@ void setup(){
 void draw(){
  //assign a value to a variable that keeps track of the presses and control with that?
  int cntrl_side = 0;
+ int c = 0;
+ int b = 0;
+ 
 
+ 
+ int wcircles = 100; //stating values for the initial circle
+ int hcircles = 100;
+ int xcircles = 50;
+ int ycircles = 100;
+ circles(xcircles, ycircles, wcircles, hcircles); //calling the initial circle
+ 
  
  if (keyPressed == true){
     if(key == CODED){
       if(keyCode == LEFT){
-        waves(-10, 300, 40, 80, 40, 0, PI, PI, 2*PI);
-        waves(-10, 300, 40, 160, 40, 0, PI, PI, 2*PI);
-        waves(-10, 300, 40, 240, 40, 0, PI, PI, 2*PI);
-
+        waves(-10, 300, 40, 80, 0, 0, PI, PI, 2*PI);
+        waves(-10, 300, 40, 160, 0, 0, PI, PI, 2*PI);
+        waves(-10, 300, 40, 240, 0, 0, PI, PI, 2*PI);
+ 
       }
      
     }
@@ -34,9 +47,36 @@ void draw(){
         waves(-10, 300, 40, 10, 0, 0, PI, PI, 2*PI);
 
         }
+        
       }
-    }
+    if(key == CODED){  
+     
+      
+      if(keyCode == DOWN){
+        c++;
+        for(int p = 0; p < 550; p+= 100){
+          circles(xcircles+p, ycircles, wcircles, hcircles);
+          
+        }
+
+      }
+      
  
+      }
+    
+ }
+      if(c > 0){
+        for(int q = 0; q < 550; q+= 100){
+           circles(xcircles+q, ycircles, wcircles-10, hcircles-10);
+           circles(xcircles+q, ycircles, wcircles-20, hcircles-20);
+           circles(xcircles+q, ycircles, wcircles-30, hcircles-30);
+           circles(xcircles+q, ycircles, wcircles-40, hcircles-40);
+           circles(xcircles+q, ycircles, wcircles-50, hcircles-50);
+           circles(xcircles+q, ycircles, wcircles-60, hcircles-60);
+            
+        }
+    }
+    
  
  
  
@@ -49,10 +89,16 @@ void draw(){
   
 }//draw()
 
+void circles(int xCircles, int yCircles, int wCircles, int hCircles){
+  ellipse(xCircles, yCircles, wCircles, hCircles);
+  
+}
+
+
 void waves(int x, int y, int w, int h, int e, float a, float b, float c, float d){
              //the function of arcs which loops until a line of wavy arcs is created
   int ornt = 0; //the variable that changes up the angles of the arches
-  e = 0;
+
   while (x < (width - e)){
     if(ornt==0){  //first type of arch
       arc(x, y, w, h, a, b);
@@ -121,6 +167,7 @@ void instructions(){
   println("Please read the instructions below!");
   println("Press the left key to add arcs above the one that exists.");
   println("Press the right key to add arcs below the one that exists.");
+  println("Press the down key to add circles within the initial one and more.");
   
   /*if(keyPressed){
     if(key == CODED){
