@@ -43,6 +43,7 @@ void draw(){
   arc(350,310,50,75,PI,2*PI);//back spot on belly
   fill(255);
   arc(259,242,10,64,radians(90),radians(270));//booty
+  arc(405,265,15,70,radians(-90),radians(90));//rounded out puppy's left side of chest
   arc(310,365,30,15,0,PI);//rounded front left paw
   arc(390,365,30,15,0,PI);//round front right paw
   arc(273,345,30,15,0,PI);//rounded back left paw
