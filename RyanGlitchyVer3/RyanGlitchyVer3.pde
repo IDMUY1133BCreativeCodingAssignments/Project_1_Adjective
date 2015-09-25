@@ -6,10 +6,12 @@ float strobe; // strobe will be used with random() and an if() condition to crea
 float glitch; // another float to be used in probability
 float ror; // made this float for ellipse radius
 PFont numbers; // load font for numbers
+PImage fade; // preparing a 'fade' effect with image (I referenced this code from here - https://vimeo.com/7596987)
 
 void setup() {
   size(1280, 720);
   background(255);
+  fade = get(0, 0, width, height);
   frameRate(60);
   numbers = loadFont("OCRAStd-9.vlw"); // loads OCRA font for sketch
   noCursor(); // hides cursor
@@ -18,6 +20,9 @@ void setup() {
 void draw() {  
 
   background(0); // the 'regular' background -- black
+  tint(255,255,255, 200);
+  image(fade, 0, 0);
+  noTint();
 
   // if mouse goes on subject in center, probability of a 'strobe' will drastically increase
   if (mouseX>600 && mouseX<680 && mouseY>320 && mouseY<380) {
@@ -73,6 +78,8 @@ void draw() {
       cursor(); // custom function to create lines from each side of the screen to the cursor -- see below
     }
   }
+  fade = get(0, 0, width, height);
+  
 }
 
 void cursor() {
