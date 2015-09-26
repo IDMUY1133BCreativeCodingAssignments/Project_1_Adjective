@@ -1,12 +1,17 @@
-// PROJECT ADJECTIVE: GLITCHY (TEMPORARY) --- VERSION 2 --- RYAN CHIN //
-// NEW: Added some interactivity. Click within the warping box. Added some print lines too. Just bashing in ideas into this sketch.
+// PROJECT ADJECTIVE: GLITCHY (TEMPORARY) --- VERSION 3 COLOR --- RYAN CHIN //
 // If I can eventually figure it out, I'd like to relate the if(conditions) to audio, instead of mouse presses.
+
+// INSTRUCTIONS //
+// MOVE CURSOR TO MOVE POINTS //
+// CURSOR INSIDE BOX = SUPER STROBE & GLITCH // CURSOR INSIDE BOX WHILE CLICKED = SUPER STROBE & LESS GLITCH //
+// HOLD SPACEBAR DOWN FOR COLORS //
 
 float strobe; // strobe will be used with random() and an if() condition to create the probability of a desired 'strobe' effect happening.
 float glitch; // another float to be used in probability
 float ror; // made this float for ellipse radius
 PFont numbers; // load font for numbers
 PImage fade; // preparing a 'fade' effect with image (I referenced this code from here - https://vimeo.com/7596987)
+color screen; // for color of strobe if spacebar pressed
 
 void setup() {
   size(1280, 720);
@@ -20,9 +25,16 @@ void setup() {
 void draw() {  
 
   background(0); // the 'regular' background -- black
-  tint(255,255,255, 200);
+  tint(255, 255, 255, 200);
   image(fade, 0, 0);
   noTint();
+  if (keyPressed) { // if spacebar pressed then switch to colors
+    if (key == 32) {
+      screen = color(random(255), random(255), random(255));
+    }
+  } else {
+    screen = color(255);
+  }
 
   // if mouse goes on subject in center, probability of a 'strobe' will drastically increase
   if (mouseX>600 && mouseX<680 && mouseY>320 && mouseY<380) {
@@ -53,18 +65,18 @@ void draw() {
       if (strobe<5) { // during a 'strobe'
         fill(0);
       } else { // regular fill -- no 'strobe'
-        fill(255);
+        fill(screen);
       }
       noStroke();
       ellipse(gridX, gridY, 0+random(10), 0+random(10)); // making a grid of ellipses with randomly changing radii
 
       //now to draw everything else besides the main subject. I can put whatever I want in here!
       glitch = random(1000);
-      if (glitch < 0.5) { // extremely low probability for a 'glitch' -- if true then the diagonal lines are generated
+      if (glitch < 0.5) { // probability for a 'glitch' -- if true then the diagonal lines are generated
         if (strobe<5) {
           stroke(0);
         } else {
-          stroke(255);
+          stroke(screen);
         }
         noFill();
         xtraLines(); // function for the extra lines! see below...
@@ -79,7 +91,6 @@ void draw() {
     }
   }
   fade = get(0, 0, width, height);
-  
 }
 
 void cursor() {
