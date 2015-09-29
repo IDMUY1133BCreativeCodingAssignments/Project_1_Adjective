@@ -1,12 +1,52 @@
 void setup(){
   size(700,600);
+  frameRate(4);
 }
 
 void draw(){
   background(210,245,240);
-  //noFill();
-  fill(255);
+  if (frameCount%2==0){
+    tail();
+  }
+  else{
+    pushMatrix();
+    translate(55,45);
+    scale(.8,.8);
+    tail();
+    popMatrix();
+  }
+  puppybodystanding();
+  //puppybodysitting();
+  tongue();
+  if (frameCount%2==0){
+    tongue();
+  }
+  else{
+    pushMatrix();
+    translate(0,1); 
+    tongue();
+    popMatrix();
+  }
+  puppyface();
+  if (frameCount%16==0){
+    blink();
+  }
+  else{
+    eyes();
+  }
+
   
+
+  ////coordinate aid
+  //line(0,mouseY,width,mouseY);
+  //line(mouseX,0,mouseX, height);
+  //if (mousePressed){
+  // println(mouseX,mouseY);
+  //} //<>//
+}
+
+void tail(){
+  fill(255);
   //tail
   beginShape();
   vertex(230,161);
@@ -25,9 +65,10 @@ void draw(){
   vertex(232,181);
   vertex(230,174);
   vertex(230,161);
-  endShape();
-  
-  //probably just a mockup for now--> rounding out
+  endShape();  
+}
+void puppybodystanding(){
+  fill(255);
   rect(258,225,30,120); //back leg my left
   rect(338,225,30,120); //back leg my right
   quad(258,208,258,268,310,310,310,220); //back body
@@ -40,22 +81,25 @@ void draw(){
   rect(375,225,30,140); //front leg my right
   rect(295,225,110,85);//front body
   fill(0);
-  arc(350,310,50,75,PI,2*PI);//back spot on belly
+  arc(350,310,50,30,PI,2*PI);//back spot on belly
   fill(255);
   arc(259,242,10,64,radians(90),radians(270));//booty
   arc(405,265,15,70,radians(-90),radians(90));//rounded out puppy's left side of chest
   arc(310,365,30,15,0,PI);//rounded front left paw
   arc(390,365,30,15,0,PI);//round front right paw
   arc(273,345,30,15,0,PI);//rounded back left paw
-  arc(353,345,30,15,0,PI);//rounded back right paw
-  ellipse(350,227,60,45);//chin  
+  arc(353,345,30,15,0,PI);//rounded back right paw 
   stroke(255);//cover unwanted lines
   rect(259,265,30,25);//line covered near back left leg
   line(296,310,324,310);//line covered separating body/left front leg
   line(376,310,404,310);//line covered separating body/right front leg
   line(295,241,295,290);//line covered separating front/back body
-  
-  
+}
+
+void tongue(){
+  stroke(0);
+  fill(255);
+  ellipse(350,227,60,45);//chin 
   stroke(170,96,141);//tongue
   fill(250,164,216);
   beginShape();
@@ -69,13 +113,14 @@ void draw(){
   vertex(335,227);
   endShape();
   line(350,227,350,257);//tongue fold
+}
 
+void puppyface(){
   stroke(0);
   fill(255);
   arc(350,175,150,100,radians(225),radians(315));//forehead
   arc(315,200,90,90,radians(40),radians(200));//left cheeck
-  arc(385,200,90,90,radians(-20),radians(140));//right cheeck
-  
+  arc(385,200,90,90,radians(-20),radians(140));//right cheeck 
   stroke(255);
   beginShape();//fill color of the rest of pup's face
   vertex(297,139);
@@ -84,17 +129,8 @@ void draw(){
   vertex(428,186);
   vertex(350,228);
   vertex(272,186);
-  endShape();
-  
+  endShape();  
   stroke(0);
-  fill(0);//FILL FROM THIS POINT IS BLACK
-  ellipse(315,193,7,7);//left eye
-  ellipse(385,193,7,7);//right eye
-  ellipse(350,210,15,10);//nose
-  fill(255);
-  ellipse(315,194,4,4);//left pupil
-  ellipse(385,194,4,4);//right pupil  ...eventually to follow the mouse
-  
   fill(0);
   //left ear
   beginShape();//starting at top vertext connecting to head
@@ -106,8 +142,7 @@ void draw(){
   vertex(247,200);
   vertex(251,209);
   vertex(261,218);
-  endShape();
-  
+  endShape(); 
   //right ear
   beginShape();
   vertex(400,140);//starting at top vertex connecting to head
@@ -118,8 +153,7 @@ void draw(){
   vertex(454,200);
   vertex(450,209);
   vertex(440,218);
-  endShape();
-  
+  endShape(); 
   //freckles
   ellipse(300,215,2,2);//left cheek's freckles, starting at the left-most freckle
   ellipse(320,215,2,2);//moving clockwise
@@ -127,17 +161,20 @@ void draw(){
   ellipse(400,215,2,2);//right cheek's freckles, starting at the right-most freckle
   ellipse(380,215,2,2);//moving counter-clockwise
   ellipse(390,230,2,2);
-
-
-  //coordinate aid
-  line(0,mouseY,width,mouseY);
-  line(mouseX,0,mouseX, height);
-  if (mousePressed){
-    println(mouseX,mouseY);
-  }
+  ellipse(350,210,15,10);//nose
 }
-
-void puppy(){ 
-  //to eventually separate puppy's features into individual functions
-  //...to then create whole body of puppy into one function
+  
+void eyes(){
+  fill(0);//FILL FROM THIS POINT IS BLACK
+  ellipse(315,193,7,7);//left eye
+  ellipse(385,193,7,7);//right eye
+  fill(255);
+  ellipse(315,194,4,4);//left pupil
+  ellipse(385,194,4,4);//right pupil  ...eventually to follow the mouse
+}
+void blink(){
+ noFill();
+ stroke(2);
+ arc(315,193,9,7,0,PI);
+ arc(385,193,9,7,0,PI);
 }
