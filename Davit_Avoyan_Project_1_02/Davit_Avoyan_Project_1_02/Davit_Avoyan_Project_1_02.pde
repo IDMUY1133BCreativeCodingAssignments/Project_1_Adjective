@@ -21,7 +21,8 @@ void draw(){
  int c = 0;
  int b = 0;
  
-
+ mov_rect(10, 10);
+ //empty_lines();
  
  int wcircles = 100; //stating values for the initial circle
  int hcircles = 100;
@@ -90,10 +91,43 @@ void draw(){
 }//draw()
 
 void circles(int xCircles, int yCircles, int wCircles, int hCircles){
-  ellipse(xCircles, yCircles, wCircles, hCircles);
-  
+  ellipse(xCircles, yCircles, wCircles, hCircles); 
 }
 
+
+void mov_rect(int w, int h){
+  
+  /*float xpos;
+  xpos= mouseX;
+  float ypos;
+  ypos= mouseY;
+  rect(xpos, ypos, 20, 20);*/
+  
+  
+  pushMatrix();
+  if(mousePressed){ //not working for some reason, trying to 
+                    //move away the rectangles if mouse is pressed
+    translate(800, 800);
+  }
+  rotate(atan2((mouseY/3), mouseX/2)); //make an arc with rects
+                                        //and mouse movement
+  rect(500, 50, w, h);
+  
+  popMatrix();
+ 
+}
+ 
+
+
+/*void empty_lines(int z, int c){
+  stroke(255);
+  for(int z = 0; z < width; z=+5){
+    for(int c = 0; c < height; c=+5){
+      rect(z, c, 100, 100);
+    }
+    
+  }
+}*/
 
 void waves(int x, int y, int w, int h, int e, float a, float b, float c, float d){
              //the function of arcs which loops until a line of wavy arcs is created
