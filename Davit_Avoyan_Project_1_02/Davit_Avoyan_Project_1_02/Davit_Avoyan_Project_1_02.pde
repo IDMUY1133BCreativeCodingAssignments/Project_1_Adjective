@@ -21,13 +21,24 @@ void draw(){
  int c = 0;
  int b = 0;
  
- mov_rect(10, 10);
+ color rect3 = color(180, 120, 180);
+
+ if (keyPressed == true){
+    if(key == CODED){
+      if(keyCode == UP){         
+         mov_rect(15, 15, rect3);
+       }
+    }
+ }
+ 
  //empty_lines();
  
  int wcircles = 100; //stating values for the initial circle
  int hcircles = 100;
  int xcircles = 50;
  int ycircles = 100;
+ 
+ noFill(); 
  circles(xcircles, ycircles, wcircles, hcircles); //calling the initial circle
  
  
@@ -37,11 +48,18 @@ void draw(){
         waves(-10, 300, 40, 80, 0, 0, PI, PI, 2*PI);
         waves(-10, 300, 40, 160, 0, 0, PI, PI, 2*PI);
         waves(-10, 300, 40, 240, 0, 0, PI, PI, 2*PI);
+      if(key == SHIFT){
+           pushMatrix(); 
+           translate(30, 20);
+           ellipse(20, 20, 20, 20);
+           popMatrix(); 
+          
+        }
  
       }
      
     }
-    
+  
     if(key == CODED){
       if(keyCode == RIGHT){
         waves(-10, 300, 40, 20, 0, 0, PI, PI, 2*PI);
@@ -95,7 +113,7 @@ void circles(int xCircles, int yCircles, int wCircles, int hCircles){
 }
 
 
-void mov_rect(int w, int h){
+void mov_rect(int w, int h, color rectColor){
   
   /*float xpos;
   xpos= mouseX;
@@ -103,7 +121,7 @@ void mov_rect(int w, int h){
   ypos= mouseY;
   rect(xpos, ypos, 20, 20);*/
   
-  
+  fill(rectColor);
   pushMatrix();
   if(mousePressed){ //not working for some reason, trying to 
                     //move away the rectangles if mouse is pressed
