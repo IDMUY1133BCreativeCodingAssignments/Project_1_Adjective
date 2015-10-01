@@ -1,9 +1,13 @@
 //TRIANGLE SLOWLY REVERTS TO ORIGINAL POSITION ONCE MOUSE LEAVES SCREEN
 //RECTANGLE CAN ONLY BE STRETCHED VERTICALLY, AND WHEN MOUSE LEAVES SCREEN, IT ACTS LIKE A SPRING AND BOUNCES BACK INTO POSITION
-//still do the thing where the farther it is, the more transparent the shape is.
+//still do the thing where the farther it is, the lighter the shape is.
 //TO DO:
 //look up constrain for triangle
 //look at spring example for rectangle
+//maybe make eM DANCE??
+//maybe have triangle follow direction of mouse
+//MAYBE have shapes stretch towards direction of mouse at ALL times, and 
+//shapes don't stop stretching until it gets to the mouse and "sticks"
 
 int triX = 150; //the static positions of the two shapes
 int triY = 110;
@@ -38,35 +42,8 @@ void draw() {
   background(122, 178, 152);
   rectMode(CORNER); //rectMode(CORNER) has to be explicity stated here because it is changed later on to CENTER
   update(); //updates mouseX and mouseY positions
-  if (lockedTri){ //if mouse is over the little circle, adjust coordinates accordingly
-    triCoordinatesX[0] = mouseX;
-    triCoordinatesY[0] = mouseY;
-    triOpac = mouseX; 
-  } else {
-    triCoordinatesX[0] = triX;
-    triCoordinatesY[0] = triY;
-    triOpac = 255;
-    /* trying to get the triangle to slowly return to position 
-    rather than just "teleport" to static position
-  else{
-   constrain(triCoordinatesX[0], 0, triX);
-   constrain(triCoordinatesY[0], 0, triY);
-   triCoordinatesX[0] = triCoordinatesX[0] + 1;
-   triCoordinatesY[0] = triCoordinatesY[0] + 1;
-   }
-   */
-  }
-    background(122, 178, 152); //green 
-  if(lockedRec) {
-    rectCoordinatesY[2] = mouseY;
-    rectCoordinatesY[3] = mouseY;
-    rectOpac = mouseY;
-  }else
-  {
-    rectCoordinatesY[2] = rectHeight;
-    rectCoordinatesY[3] = rectHeight;
-  }
-  
+  coordinateAdjust(lockedTri, lockedRec);
+  background(122, 178, 152); //green 
   drawShapes();
 }
 
@@ -74,18 +51,21 @@ void draw() {
 void drawShapes() {
   fill(255, 177, 165, triOpac); //pink
   beginShape();
-  vertex(triCoordinatesX[0], triCoordinatesY[0]); //150, 110
-  vertex(triCoordinatesX[1], triCoordinatesY[1]); //100, 200
-  vertex(triCoordinatesX[2], triCoordinatesY[2]); //200, 200
+  for (int i = 0; i < triCoordinatesX.length-1; i++) {
+    for (int j = 0; j < triCoordinatesY.length - 1; j++) {
+      vertex(triCoordinatesX[i], triCoordinatesY[i]);
+      vertex(triCoordinatesX[i + 1], triCoordinatesY[i + 1]);
+    }
+  }
   endShape(CLOSE);
-  
+
   //allows little circle on top of triangle for bigger range that allows the user to "stick" to the triangle 
   fill(255);
   ellipse(triCoordinatesX[0], triCoordinatesY[0], ellHeight, ellHeight);
-  
+
   fill(225, 191, 255); //purple 
   beginShape();
-    //for loop populates array and then draws shapes at the same time. 
+  //for loop populates array and then draws shapes at the same time. 
   //http://forum.processing.org/one/topic/drawing-a-vertex-from-an-array.html
   for (int i = 0; i < rectCoordinatesX.length - 1; i++) {
     for (int j = 0; j < rectCoordinatesY.length - 1; j++) {
@@ -96,7 +76,7 @@ void drawShapes() {
   endShape(CLOSE);
   rectMode(CENTER); //changes rectMode so the square on top of the rectangle can be drawn using midpoint
   fill(255);
-  
+
   //draws the little rectangle on top of the big rectangle accordingly
   rectMidiX = (rectCoordinatesX[0] + rectCoordinatesX[1]) / 2;
   rectMidiY = rectCoordinatesY[3];
@@ -108,16 +88,46 @@ void update() {
     && mouseY > triCoordinatesY[0] - ellHeight / 2 && mouseY <triCoordinatesY[0] + ellHeight/2) {
     //float mx = constrain(mouseX, 50, 110);
     lockedTri = true;
-  } else if (mouseX <= 10 || mouseY <= 10 || mouseY > height - 10 || mouseX > width - 10 ){
+  } else if (mouseX <= 10 || mouseY <= 10 || mouseY > height - 10 || mouseX > width - 10 ) {
     lockedTri = false;
     //retract();
   }
-  if(mouseX > rectMidiX - lilRectHeight && mouseX < rectMidiX + lilRectHeight && mouseY > rectMidiY - lilRectHeight
-  && mouseY < rectMidiY + lilRectHeight){ 
+  if (mouseX > rectMidiX - lilRectHeight && mouseX < rectMidiX + lilRectHeight && mouseY > rectMidiY - lilRectHeight
+    && mouseY < rectMidiY + lilRectHeight) { 
     lockedRec = true;
-  }
-  else if (mouseX <= 10 || mouseY <= 10 || mouseY > height - 10 || mouseX > width - 10 ){
+  } else if (mouseX <= 10 || mouseY <= 10 || mouseY > height - 10 || mouseX > width - 10 ) {
     lockedRec = false;
+  }
+}
+
+void coordinateAdjust(boolean tri, boolean rect) {
+  if (tri) { //if mouse is over the little circle, adjust coordinates accordingly
+    triCoordinatesX[0] = mouseX;
+    triCoordinatesY[0] = mouseY;
+    triOpac = mouseX;
+  } else if (triCoordinatesX[0] != mouseX && triCoordinatesY[0] != mouseY) {
+    triCoordinatesX[0] = triCoordinatesX[0] + .01;
+    triCoordinatesY[0] = triCoordinatesX[0] + .01;
+    //triCoordinatesX[0] = triX;
+    //triCoordinatesY[0] = triY;
+    triOpac = 255;
+    /* trying to get the triangle to slowly return to position 
+     rather than just "teleport" to static position
+     else{
+     constrain(triCoordinatesX[0], 0, triX);
+     constrain(triCoordinatesY[0], 0, triY);
+     }
+     */
+  }
+  background(122, 178, 152); //green 
+  if (rect) {
+    rectCoordinatesY[2] = mouseY;
+    rectCoordinatesY[3] = mouseY;
+    rectOpac = mouseY;
+  } else
+  {
+    rectCoordinatesY[2] = rectHeight;
+    rectCoordinatesY[3] = rectHeight;
   }
 }
 
@@ -128,14 +138,4 @@ void retract(){
  triCoordinatesX[0] = triCoordinatesX[0] + 1;
  triCoordinatesY[0] = triCoordinatesY[0] + 1;
  }
- */
-
-/*
-for(int i = 0; i < triCoordinatesX.length-1; i++){
- for(int j = 0; j < triCoordinatesY.length - 1; j++){
- vertex(triCoordinatesX[i], triCoordinatesY[i]);
- vertex(triCoordinatesX[i + 1], triCoordinatesY[i + 1]);
- }
- }
- endShape(CLOSE);
  */
