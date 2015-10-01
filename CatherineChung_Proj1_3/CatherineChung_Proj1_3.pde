@@ -22,9 +22,8 @@ Raindrop h1;
 Raindrop [] rain = new Raindrop[30];
 //suncolor array
 int sun [] = new int[10]; 
-color sunco = color(random(255), random(255), random(255));
+//color sunco = color(random(255), random(255), random(255));
 //color cloudCo = color(47,46,56); 
-//color 
 
 void setup(){
   size(600,600); 
@@ -73,6 +72,7 @@ void press(){
   if(mousePressed == true){
     clkBckgrnd();
     clkCloud();
+    clkSun();
     for( int i = 0; i < rain.length; i++){
       rain[i] = new Raindrop();
       h1 = new Raindrop();
@@ -198,7 +198,10 @@ class Raindrop{
     }
   }
 } //end of Raindrop class
-
+void clkSun(){
+  fill(68,71,70);
+  ellipse(550,20,200,200);
+}
 void colorSun(){
   
   for(int i=0; i < sun.length; i++){
