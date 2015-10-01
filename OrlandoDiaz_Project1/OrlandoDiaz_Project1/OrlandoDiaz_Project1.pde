@@ -1,3 +1,5 @@
+//Press the "i/I" key for a spooky surprise! also my floating problems is in the comment below
+int floatBill=200; //I tried putting if() statements that added30 and subtracted 30 but the movement was too "bouncy". I also would have to make a lot of separate ints. I can't help but feel there's an easier way to make him float up and down. But everytime I Google how it gives me explanations on float() -_-. Pls help Katherine.
 float bx;
 float by;
 color background = color(255);
@@ -9,15 +11,45 @@ color Pupil = color(0); //Black
 void setup(){
   size(800,800);
   smooth();
-println("Hey kid, wanna make a deal?! Just click on me once and you'll gain all the knowledge in the universe! Pretty sweet deal if I do say so myself!");
-println("(Trust him? Click on him. Don't trust him? Press 'X' to try to eliminate him)");
 }
 void draw(){
   background(background);
   fill(Bill);
   stroke(BillStroke);
   strokeWeight(2);
+  BillCipher();
+  //frameRate(15);
+  //floatBill=floatBill+19;
+  //if (floatBill>230){
+   // floatBill=floatBill-20;
+  //}
+  //if (floatBill<201){
+  //floatBill=floatBill+21;
+  //}
+}
+void LeftArm(){
+   line(253, 355, 253, 422); //Left Arm (vertical)
+}
+void Eye(){
+  float bx = constrain(mouseX, 380, 420); //Mouse Tracking X
+  float by = constrain(mouseY, 286, 314); //Mouse Tracking Y
+    fill(Eyeball);
+    stroke(0);
+  ellipse(400,300, 87,76); //Eyeball  
+  fill(Pupil);
+  ellipse(bx, by, 15, 40); //Pupil  
+  line(384,264, 381,256); //1st Eyelash from Right on Top
+  line(393,249, 395,262); //2nd Eyelash from Right on Top
+  line(405,262, 406,247); //3rd Eyelash from Right on Top
+  line(416,263, 418,253); //4th Eyelash from Right on Top  
+  line(377,344, 380,335); //1st Eyelash from Right on Bottom
+  line(392,338, 391,349); //2nd Eyelash from Right on Bottom
+  line(406,338, 407,349); //3rd Eyelash from Right on Bottom
+  line(419,336, 422,345); //4th Eyelash from Right on Bottom
+}
+void BillCipher(){
   triangle(400,200, 285, 400, 515, 400); //Bill Cipher Body
+    //triangle(400,floatBill, 285, 400, 515, 400); //Bill Cipher Body
   Eye();  
   stroke(BrickStroke);
   noFill();
@@ -50,26 +82,6 @@ void draw(){
   line(430, 449, 413, 420); //Right Leg (btwn Knee and Foot)
   line(413, 420, 413, 455); //Right Foot
 }
-void LeftArm(){
-   line(253, 355, 253, 422); //Left Arm (vertical)
-}
-void Eye(){
-  float bx = constrain(mouseX, 380, 420); //Mouse Tracking X
-  float by = constrain(mouseY, 286, 314); //Mouse Tracking Y
-    fill(Eyeball);
-    stroke(0);
-  ellipse(400,300, 87,76); //Eyeball  
-  fill(Pupil);
-  ellipse(bx, by, 15, 40); //Pupil  
-  line(384,264, 381,256); //1st Eyelash from Right on Top
-  line(393,249, 395,262); //2nd Eyelash from Right on Top
-  line(405,262, 406,247); //3rd Eyelash from Right on Top
-  line(416,263, 418,253); //4th Eyelash from Right on Top  
-  line(377,344, 380,335); //1st Eyelash from Right on Bottom
-  line(392,338, 391,349); //2nd Eyelash from Right on Bottom
-  line(406,338, 407,349); //3rd Eyelash from Right on Bottom
-  line(419,336, 422,345); //4th Eyelash from Right on Bottom
-}
 void mouseReleased(){
   background = color(0); //turns background Black
     Bill = color(247,83,56);
@@ -77,12 +89,28 @@ void mouseReleased(){
     BrickStroke = color(232,55,35);
     Eyeball = color(0);
     Pupil = color(255);
-   println("AHAHAHAHAHAHAHAHAHA!!!! THANKS FOR FREEING ME FROM THAT PROGRAM KID! NOW I'LL DESTROY THE WORLD!!! AND IT'S ALL YOUR FAULT!");
 }
 void keyPressed(){
   if(keyPressed){
-    if(key == 'x' || key == 'X'){
-      println("Nice try wise guy! You can't get rid of me! Now click on me before somebody gets hurt!!");
+    if(key == 'I' || key == 'i'){
+      pushMatrix(); //Big Bill Flash
+      translate(-200,-270);
+      scale(2);
+      fill(18,36,211);
+      BillCipher();
+      popMatrix();
+        pushMatrix(); //Tiny Bill Flash
+        translate(-140,-50);
+        scale(0.6);
+        fill(45,114,48);
+        BillCipher();
+        popMatrix();
+          pushMatrix(); //Medium Bill Flash
+          translate(-170,335);
+          scale(0.8);
+          fill(99,22,178);
+          BillCipher();
+          popMatrix();
                                 }
                 }
 }
