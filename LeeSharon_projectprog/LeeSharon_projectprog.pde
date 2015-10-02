@@ -1,12 +1,16 @@
+int x=0;//x width expansion
+int y=0;//y heigh expansion
+int treat=2; //treat variable
+
 void setup(){
   size(700,600);
-  frameRate(4);
+  frameRate(8);
 }
-
 void draw(){
   background(210,245,240);
+  stroke(0);
   if (frameCount%2==0){
-    tail();
+    tail();//tail wag animation
   }
   else{
     pushMatrix();
@@ -15,10 +19,9 @@ void draw(){
     tail();
     popMatrix();
   }
-  puppybodystanding();
-  //puppybodysitting();
-  tongue();
-  if (frameCount%2==0){
+  puppybodystanding(x,y);
+  tongue();//panting animation
+  if (frameCount%4==0){
     tongue();
   }
   else{
@@ -27,21 +30,33 @@ void draw(){
     tongue();
     popMatrix();
   }
-  puppyface();
-  if (frameCount%16==0){
+  puppyface();//animated blinking
+  if (frameCount%32==0){
     blink();
   }
   else{
     eyes();
   }
-
-  
+  treatbag();//click on treat box
+  if ((mousePressed==true)&&(mouseX<180)&&(mouseY>420)){
+   treat=1;
+  }
+  if ((mousePressed==true)&&(mouseX>334)&&(mouseX<366)&&(mouseY>228)&&(mouseY<257)){
+    treat=0;//click on puppys tongue, treat "drops", puppy's size variable adjusts
+    x=x+2;
+    y=y+2;
+  }
+  if (treat==1){
+   noStroke();//treat appears and follows mouse
+   fill(155,137,109);
+   ellipse(mouseX,mouseY,15,15);
+  } 
 
   ////coordinate aid
   //line(0,mouseY,width,mouseY);
   //line(mouseX,0,mouseX, height);
   //if (mousePressed){
-  // println(mouseX,mouseY);
+  //println(mouseX,mouseY);
   //} //<>//
 }
 
@@ -67,35 +82,46 @@ void tail(){
   vertex(230,161);
   endShape();  
 }
-void puppybodystanding(){
-  fill(255);
-  rect(258,225,30,120); //back leg my left
-  rect(338,225,30,120); //back leg my right
-  quad(258,208,258,268,310,310,310,220); //back body
-  arc(270,215,22,15,PI,2*PI);//rounded backside
-  arc(325,290,100,45,PI/2,PI);//rounded back stomache
+  
+void puppybodystanding(int x, int y){//passing variables to adjust size of pup
+  fill(255);  
+  rect(258-x,225,30,120); //back leg my left
+  rect(338+x,225,30,120); //back leg my right
+  arc(273-x,345,30,15,0,PI);//rounded back left paw
+  arc(353+x,345,30,15,0,PI);//rounded back right paw 
   fill(0);
-  arc(350,310,70,15,0,PI);//rounded front stomache
+  if (frameCount%4==0){//stomach breathing animation
+    pushMatrix();
+    translate(0,1);
+    arc(350,303,90+2*x,20+2*y,0,PI);//rounded front stomache
+    popMatrix();
+  }
+  else{
+    arc(350,305,90+2*x,20+2*y,0,PI);//rounded front stomache
+  }
   fill(255);
-  rect(295,225,30,140); //front leg my left
-  rect(375,225,30,140); //front leg my right
-  rect(295,225,110,85);//front body
+  quad(257-x,215,257-x,268,310+x,310,310+x,220); //back body
+  arc(300-x/2,280,50+x,35+2*y,PI/2,radians(160));//rounded back stomache
+  rect(295-x,225,30,140); //front leg my left
+  rect(375+x,225,30,140); //front leg my right
+  arc(310-x,365,30,15,0,PI);//rounded front left paw
+  arc(390+x,365,30,15,0,PI);//rounded front right paw
+  noStroke();
+  rect(298-x,230,105+2*x,80);//front body
+  fill(255);
+  stroke(0);
   fill(0);
-  arc(350,310,50,30,PI,2*PI);//back spot on belly
+  arc(350,310,50+2*x,30+y/2,PI,2*PI);//black spot on belly
   fill(255);
-  arc(259,242,10,64,radians(90),radians(270));//booty
-  arc(405,265,15,70,radians(-90),radians(90));//rounded out puppy's left side of chest
-  arc(310,365,30,15,0,PI);//rounded front left paw
-  arc(390,365,30,15,0,PI);//round front right paw
-  arc(273,345,30,15,0,PI);//rounded back left paw
-  arc(353,345,30,15,0,PI);//rounded back right paw 
+  arc(260-x,242+y/2,20+x,56+y,radians(90),radians(270));//booty
+  arc(405+x,265+y/2,15+x,70+y,radians(-90),radians(90));//rounded out puppy's left side of chest
+  arc(327,242,166+2*x,100,radians(210),radians(350));//rounded backside
   stroke(255);//cover unwanted lines
-  rect(259,265,30,25);//line covered near back left leg
-  line(296,310,324,310);//line covered separating body/left front leg
-  line(376,310,404,310);//line covered separating body/right front leg
-  line(295,241,295,290);//line covered separating front/back body
+  rect(259-x,265,30,25);//line covered near back left leg
+  line(296-x,310,324-x,310);//line covered separating body/left front leg
+  line(376+x,310,404+x,310);//line covered separating body/right front leg
+  rect(290-x,224,14,66+y/2);//rect covered separating front/back body
 }
-
 void tongue(){
   stroke(0);
   fill(255);
@@ -177,4 +203,15 @@ void blink(){
  stroke(2);
  arc(315,193,9,7,0,PI);
  arc(385,193,9,7,0,PI);
+}
+
+void treatbag(){
+  fill(255);
+  rect(0,420,180,180);
+  pushMatrix();
+    translate(-45,60);
+    rect(0,420,180,180);
+  popMatrix();
+  line(135,480,180,420);
+
 }
