@@ -1,12 +1,12 @@
 int w = 120; //jack width
-int h = 30; //jack height
+int h = 50; //jack height
 float xpos, ypos; // starting point
 
-float xspeed = 10.8;  // Speed of the shape
-float yspeed = 10.2;  // Speed of the shape
+float xspeed = 5.8;  // Speed of the shape
+float yspeed = 5.2;  // Speed of the shape
 
-int xdirection = 1;  // Left or Right
-int ydirection = 1;  // Top to Bottom
+int xdirection = 2;  // Left or Right
+int ydirection = 2;  // Top to Bottom
 
 
 void setup(){
@@ -141,7 +141,3 @@ void setup(){
    fill(115,123,126);
    ellipse(250,80,355,75);
   }
-    
-/*create trampoiline
-have thrampoiline bounce when jack is dragged into it.
-*/
