@@ -1,191 +1,135 @@
-//TRIANGLE SLOWLY REVERTS TO ORIGINAL POSITION ONCE MOUSE LEAVES SCREEN
-//RECTANGLE CAN ONLY BE STRETCHED VERTICALLY, AND WHEN MOUSE LEAVES SCREEN, IT ACTS LIKE A SPRING AND BOUNCES BACK INTO POSITION
-//still do the thing where the farther it is, the lighter the shape is.
-//TO DO:
-//look up constrain for triangle
-//look at spring example for rectangle
-//MAYBE have shapes stretch towards direction of mouse at ALL times, and 
-//shapes don't stop stretching until it gets to the mouse and "sticks"
-//RESTRICT RECTANGLE FROM BEING STRETCHED DOWN (it complicates things)
-//consider changing color of rectangle to make "getting lighter" more visible. 
-//glitch: sometimes the rectangle starts to go up and down with mouse even when not over white square WHY
-//maybe instead of activating shape by mousing over little shape, do it over big shape.
-//but keep the little shape on the circle maybe? or maybe get rid of little shapes? 
-//mouse into triangle, and don't change anything, but when you mouse out, 
-//the vertex follows it
-int triX = 150; //the static positions of the two shapes
-int triY = 110;
-int rectLength = 150;
-int rectHeight = 100;
+//TO DO: 
+//ADD STICK FUNCTION
+//FIGURE OUT ARRIVE FUNCTION
+//INTEGRATE RECTANGLE COMPONENT MAYBE UGHHHHHHH
+//AND THE COLOR THING TOO (LIGHTER AS FARTHER AWAY)
+//if the mouse is outside the screen and the triangle is retracting
+//it will keep on retracting
 
-float[] triCoordinatesX = {triX, 100, 200}; //arrays of vertex points so they can be easily adjusted
-float[] triCoordinatesY = {triY, 300, 300};
-float[] rectCoordinatesX = {300, 450, 450, 300};
-float[] rectCoordinatesY = {300, 300, 100, 100};
+//otherwise, if you put the mouse in screen while triangle is retracting
+//the triangle will stop
+//so figure out that logic sigh 
+Triangle triangle; 
 
-float rectMidiX; //center of square on top of rectangle  
-float rectMidiY; 
+float statTriX = 150; //the static positions of the triangle
+float statTriY = 110;
 
-int lilRectHeight = 10; //height and width of square on top of rectangle 
-int ellHeight = 25; //height and width of circle on top of triangle
+PVector mouse; 
+PVector statTri;
+boolean inShape = false; 
 
-boolean lockedTri = false; //used to tell if mouse goes over little button bits 
-boolean lockedRec = false; 
+float maxSpeed = 2.4;
+float maxAcc = .01;
 
-float triBright = 255; //used to adjust opacity of shapes so wider the stretch, more transparent (maybe lighter instead?) the shapes go
-float rectBright = 255; 
-
-float distance = 0.0;
-
-int colorRecChange = 135;
-int colorTriChange;
-
-boolean receding = false;
+boolean activate = false;
+boolean retract = false;
+boolean stuck = false; 
+int start = 0;
 
 void setup() {
+  size(600, 300);
   background(122, 178, 152);
   noStroke();
-  size(600, 300);
- 
-  frameRate(3000);
+  frameRate(60);
+  triangle = new Triangle();
+  triangle(statTriX, statTriY, 100, 300, 200, 300);
 }
 
 void draw() {
-  background(122, 178, 152);
-  rectMode(CORNER); //rectMode(CORNER) has to be explicity stated here because it is changed later on to CENTER
-  update(); //updates mouseX and mouseY positions
-  coordinateAdjust(lockedTri, lockedRec);
-  //background(122, 178, 152); //green 
-  drawShapes();
-}
-
-void update() {
-  /*
-  distance = dist(triCoordinatesX[0], triCoordinatesY[0], mouseX, mouseY);
-   if(distance < 0){
-   
-   }
-   else if(distance > 0){
-   
-   }
-   */
-  if (mouseX > triCoordinatesX[0] - ellHeight/2 && mouseX < triCoordinatesX[0] + ellHeight/2
-    && mouseY > triCoordinatesY[0] - ellHeight / 2 && mouseY <triCoordinatesY[0] + ellHeight/2) {
-    //float mx = constrain(mouseX, 50, 110);
-    lockedTri = true;
-  } else if (mouseX <= 10 || mouseY <= 10 || mouseY > height - 10 || mouseX > width - 10 ) { //checks when mouse left the screen
-    lockedTri = false;
-    receding = true;
-    recede(); //call recede method to return triangle back to original position 
-  }
-  else
-  {
-    lockedTri = false;
-  }
-  
-  if (mouseX > rectMidiX - lilRectHeight && mouseX < rectMidiX + lilRectHeight && mouseY > rectMidiY - lilRectHeight
-    && mouseY < rectMidiY + lilRectHeight) { 
-    lockedRec = true;
-  } else if (mouseY <= 10){ //so spring motion only happens when mouse leaves screen from above 
-    lockedRec = false;
+  //add sticking function in here somewhere
+  mouse = new PVector(mouseX, mouseY);
+  statTri = new PVector(150, 100);
+  triangle.mousedOverTri(); //checks to see if the vertex should move towards mouse
+  float d = triangle.getCoord().dist(mouse); //sees if vertex is close to mouse
+  if (1 < d && d < 2) {
+    triangle.staticTri(); //will get the vertex to stop wobbling once it reaches close to mouse
+    stuck = true;
+  } else if (stuck & !leftScreen()) {
+    background(122, 178, 152);
+    triangle(mouseX, mouseY, 100, 300, 200, 300);
+    triangle.setCoord(mouse); //updates coordinates of triangle so it'll retract correctly
+  } else if (leftScreen() && !stuck) {
+    triangle.seek(statTri); //instead of the mouse as the target, the target is now the vector of the original position
+    triangle.update();
+    background(122, 178, 152);
+    triangle.display();
+    activate = false; //triangle will not move once mouse reenters screen unless mouse goes over triangle
+  } else if (!leftScreen() && activate == true && !stuck) {
+    triangle.seek(mouse);
+    triangle.update();
+    background(122, 178, 152);//prevents triangle from continuously showing
+    triangle.display();
   }
 }
 
-void coordinateAdjust(boolean tri, boolean rect) { 
-  if (tri) { //if mouse is over the little circle, adjust coordinates accordingly
-    triCoordinatesX[0] = mouseX;
-    triCoordinatesY[0] = mouseY;
-  }
-  else if (!tri && triCoordinatesX[0] != mouseX && triCoordinatesY[0] != mouseY) { //vertex stretching towards mouse b/c circle not in mouse
-    triCoordinatesX[0] = triCoordinatesX[0] + .01;
-    triCoordinatesY[0] = triCoordinatesX[0] + .01;
-    //triCoordinatesX[0] = triX;
-    //triCoordinatesY[0] = triY;
-    /* trying to get the triangle to slowly return to position 
-     rather than just "teleport" to static position
-     */
-  }
-  else if (!tri && receding){ //vertex returning to original because circle not in mouse and mouse left screen
-     //make triangle travel to original position  
-     triCoordinatesX[0] = triX;
-     triCoordinatesY[0] = triY;
-    }
-    
-  background(122, 178, 152); //green background
-  if (rect) {
-    rectCoordinatesY[2] = mouseY;
-    rectCoordinatesY[3] = mouseY;
-    adjustRecCol(); //makes color lighter
-  } else
-  {
-    rectCoordinatesY[2] = rectHeight;
-    rectCoordinatesY[3] = rectHeight;
-    colorRecChange = 135;
-  }
-}
+class Triangle {
+  PVector tri1;
+  PVector tri2;
+  PVector tri3;
+  PVector velocity;
+  PVector acceleration;
+  PVector desired;
+  PVector target;
+  PVector steer; 
 
-void adjustRecCol() {
-  float fromRectOrig = dist(375, 150, mouseX, mouseY);
-  colorRecChange = int(map(rectBright, mouseX, mouseY, 135, 207)); //FIX THIS LINE (the second and third, the last two numbers are good)
-  //basically, the farther it is from the original position, the lighter it is, WHAT AM I MISSING OH MY GOSH 
-  //colorRecChange = int(map(rectBright, fromRectOrig, rectHeight, 110, 181));
-}
+  Triangle() {
+    tri1 = new PVector(statTriX, statTriY);
+    tri2 = new PVector(100, 300); //
+    tri3 = new PVector(200, 300); //
+    velocity = new PVector(.01, .01);
+    acceleration = new PVector(.01, .01);
+  }
 
-void adjustTriCol(){ //adjust triangle color 
-  float fromTriOrig = dist(triX, triY, mouseX, mouseY);
-}
+  void seek(PVector target) {
+    PVector desired = PVector.sub(target, tri1); // vector that points from object to location
+    desired.normalize(); //makes it unit vector of 1, so it is just represents direction
+    desired.mult(1); //
+    acceleration = desired; //acceleration is in direction of target (since it was normalized)
+    //then determined by multiplication
+  }
 
-void recede(){ //used to make the triangle return to original position 
-  
-}
-void drawShapes() {
-  fill(255, 177, 165); //pink
-  beginShape();
-  for (int i = 0; i < triCoordinatesX.length-1; i++) {
-    for (int j = 0; j < triCoordinatesY.length - 1; j++) {
-      vertex(triCoordinatesX[i], triCoordinatesY[i]);
-      vertex(triCoordinatesX[i + 1], triCoordinatesY[i + 1]);
+  void update() {
+    velocity.add(acceleration); //velocity incremented by acceleration 
+    velocity.limit(maxSpeed); //prevents velocity from being TOO fast
+    tri1.add(velocity);
+  }
+
+  void display() { // displays final triangle 
+    fill(255, 177, 165); 
+    triangle(tri1.x, tri1.y, tri2.x, tri2.y, tri3.x, tri3.y);
+  }
+
+  void mousedOverTri() {
+    if (mouse.x > tri2.x && mouse.x < tri3.x
+      && mouse.y > tri1.y && mouse.y < tri3.y) {
+      activate = true; //will make the vertex start to move towards mouse
     }
   }
-  endShape(CLOSE);
 
-  //allows little circle on top of triangle for bigger range that allows the user to "stick" to the triangle 
-  fill(255);
-  ellipse(triCoordinatesX[0], triCoordinatesY[0], ellHeight, ellHeight);
-
-  fill(225, colorRecChange, 255); //purple
-  beginShape();
-  //for loop populates array and then draws shapes at the same time. http://forum.processing.org/one/topic/drawing-a-vertex-from-an-array.html
-  for (int i = 0; i < rectCoordinatesX.length - 1; i++) {
-    for (int j = 0; j < rectCoordinatesY.length - 1; j++) {
-      vertex(rectCoordinatesX[i], rectCoordinatesY[i]);
-      vertex(rectCoordinatesX[i+1], rectCoordinatesY[i+1]);
-    }
+  void staticTri() {
+    tri1.x = mouse.x;
+    tri1.y = mouse.y;
   }
-  endShape(CLOSE);
-  rectMode(CENTER); //changes rectMode so the square on top of the rectangle can be drawn using midpoint
-  fill(255);
+
+  void setCoord(PVector newCoord) { //used to change tri1 coordinates in draw function
+    tri1.x = newCoord.x;
+    tri1.y = newCoord.y;
+  }
   
-  //draws the little rectangle on top of the big rectangle accordingly
-  rectMidiX = (rectCoordinatesX[0] + rectCoordinatesX[1]) / 2;
-  rectMidiY = rectCoordinatesY[3];
-  rect(rectMidiX, rectMidiY, 10, 10);
-  fill(0, 0, 0, 150);
-  println(mouseX);
-  println(mouseY);
- // rectMode(CORNER); //is the floor (keep or get rid of?)
-  //rect(0, 200, width, height);
+    PVector getCoord() { //used to access tri1 in draw function
+    return tri1;
+  }
 }
 
-//PVector velocity = new PVector(0,0);
-//PVector location = new PVector(random(width), random(height));
-/*
-void triMovement(){
- PVector mouse = new PVector(mouseX, mouseY);
- PVector dir = PVector.sub(mouse, location);
- dir.normalize();
- dir.mult(0.5);
- velocity.add(dir);
- location.add(velocity);
- }
- */
+boolean leftScreen() { //checks if mouse leaves the screen at all times
+  if (mouseX > width - 5 || mouseX < 5 || mouseY > height - 5 || mouseY < 5) {
+    retract = true;
+    stuck = false;
+  } else {
+    retract = false;
+  }
+  return retract;
+}
+
+class Rectangle {
+}
