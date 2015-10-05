@@ -56,6 +56,7 @@ void setup() {
   wave.patch(output);
   bass.patch(output);
   sub.patch(output);
+  player = minim.loadFile("Collider.mp3");
 
 
   background(255);
@@ -170,6 +171,7 @@ void subj(int mx, float my) {
   if (frameCount>1300) {
     fill(random(255), 0, random(255), 200);
     ellipse(gridX, gridY, 1, 0+random(my));
+    // player.play(); play jon hopkins tune if uncommented
   } else
   {
     if (frameCount>1200) {
