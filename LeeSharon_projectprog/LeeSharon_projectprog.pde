@@ -73,7 +73,7 @@ void draw(){
   strokeWeight(1);
   treatbag();//click on treat box
   if ((mousePressed==true)&&(mouseX<180)&&(mouseY>420)){
-   if (treat==1){//option to drop treat back in box if user is already holding
+   if ((treat==1)||(trust==0)){//option to drop treat back in box if user is already holding
      treat=2;
    }
    else treat=1;//otherwise treat is picked up from empty hand
@@ -143,7 +143,6 @@ void draw(){
     //after pup is sick for a certain total amt of time, pup will not cooperate
   }
 
-println(distrustmeter.length, trust);
  ////coordinate aid
  //line(0,mouseY,width,mouseY);
  //line(mouseX,0,mouseX, height);
