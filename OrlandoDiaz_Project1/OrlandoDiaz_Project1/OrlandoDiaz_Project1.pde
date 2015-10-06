@@ -1,5 +1,6 @@
-//Press the "i/I" key for a spooky surprise! also my floating problems is in the comment below
-int floatBill=200; //I tried putting if() statements that added30 and subtracted 30 but the movement was too "bouncy". I also would have to make a lot of separate ints. I can't help but feel there's an easier way to make him float up and down. But everytime I Google how it gives me explanations on float() -_-. Pls help Katherine.
+//Press the "i/I" key for a spooky surprise! Try holding down the mouse and moving the cursor too! Maybe both at the same time!
+int toptriangle=200;
+int bottomtriangle=400;
 float bx;
 float by;
 color background = color(255);
@@ -8,6 +9,8 @@ color BillStroke = color(0);
 color BrickStroke = color(238,215,47);
 color Eyeball = color(255); //White
 color Pupil = color(0); //Black
+color Hat = color(0); //for hat flashing
+color Bowtie = color(0);
 void setup(){
   size(800,800);
   smooth();
@@ -18,24 +21,12 @@ void draw(){
   stroke(BillStroke);
   strokeWeight(2);
   BillCipher();
-  //frameRate(15);
-  //floatBill=floatBill+19;
-  //if (floatBill>230){
-   // floatBill=floatBill-20;
-  //}
-  //if (floatBill<201){
-  //floatBill=floatBill+21;
-  //}
-}
-void LeftArm(){
-   line(253, 355, 253, 422); //Left Arm (vertical)
+  mousecursor();
 }
 void Eye(){
   float bx = constrain(mouseX, 380, 420); //Mouse Tracking X
   float by = constrain(mouseY, 286, 314); //Mouse Tracking Y
-    fill(Eyeball);
-    stroke(0);
-  ellipse(400,300, 87,76); //Eyeball  
+    Eyeball();
   fill(Pupil);
   ellipse(bx, by, 15, 40); //Pupil  
   line(384,264, 381,256); //1st Eyelash from Right on Top
@@ -47,9 +38,13 @@ void Eye(){
   line(406,338, 407,349); //3rd Eyelash from Right on Bottom
   line(419,336, 422,345); //4th Eyelash from Right on Bottom
 }
+void Eyeball(){
+  fill(Eyeball);
+    stroke(0);
+  ellipse(400,300, 87,76); //Eyeball  
+}
 void BillCipher(){
-  triangle(400,200, 285, 400, 515, 400); //Bill Cipher Body
-    //triangle(400,floatBill, 285, 400, 515, 400); //Bill Cipher Body
+    triangle(400,toptriangle, 285, bottomtriangle, 515, bottomtriangle); //Bill Cipher Body
   Eye();  
   stroke(BrickStroke);
   noFill();
@@ -65,12 +60,14 @@ void BillCipher(){
   quad(445,385, 445,398, 513,398, 504,385); //Bottom Row 3rd Brick from Right  
   stroke(Pupil);
   fill(Pupil);
-  quad(380,355, 380,375, 420,355, 420,375); //Bow Tie  
+  Bow(); 
+  fill(Hat);
   quad(370,195, 370,185, 430,185, 430,195); //Hat Bottom  
   quad(390,185, 410,185, 410,95, 390,95); //Hat Top  
+  fill(Pupil);
   strokeWeight(8);
   line(308, 355, 253, 355); //Left Arm (horizontal)
-  LeftArm();
+  line(253, 355, 253, 422); //Left Arm (vertical)
   ellipse(253, 422, 15, 25); //Left Hand
   line(493, 355, 548, 355); //Right Arm (horizontal)
   line(548, 355, 548, 289); //Right Arm (vertical)
@@ -82,6 +79,10 @@ void BillCipher(){
   line(430, 449, 413, 420); //Right Leg (btwn Knee and Foot)
   line(413, 420, 413, 455); //Right Foot
 }
+void Bow(){
+  fill(Bowtie);
+  quad(380,355, 380,375, 420,355, 420,375); //Bow Tie 
+}
 void mouseReleased(){
   background = color(0); //turns background Black
     Bill = color(247,83,56);
@@ -89,6 +90,8 @@ void mouseReleased(){
     BrickStroke = color(232,55,35);
     Eyeball = color(0);
     Pupil = color(255);
+    Hat = color(255);
+    Bowtie = color(255);
 }
 void keyPressed(){
   if(keyPressed){
@@ -113,4 +116,21 @@ void keyPressed(){
           popMatrix();
                                 }
                 }
+}
+void mouseDragged(){
+  translate(random(500), random(500));
+  translate(random(-500), random(-500));
+  Bow();
+  Eyeball=color(random(0,255),random(0,255),random(0,255));
+  Hat = color(random(0,255),random(0,255),random(0,255));
+  Bowtie = color(random(0,255),random(0,255),random(0,255));
+}
+void mousecursor(){
+ fill(Eyeball);
+  strokeWeight(1.5);
+  triangle(mouseX,mouseY,mouseX-20,mouseY+20,mouseX,mouseY+30);
+  line(mouseX-10,mouseY+25,mouseX-18,mouseY+40);
+  line(mouseX-10,mouseY-5,mouseX-12,mouseY-15);
+  line(mouseX+3,mouseY-5,mouseX+5,mouseY-15);
+  line(mouseX+12,mouseY,mouseX+20,mouseY-7);
 }
