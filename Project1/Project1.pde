@@ -32,17 +32,22 @@ if (click == 1) {
   }// end of if
   if (click == 4){
     background(random(5),random(0),random(25));
-    explosion(0,0);
-    for(int i = 0; i < 30; i++) {
-      int x = (int)random(600);
-      int y = (int)random(600);
-      explosion(x,y);
+    for(int i = 0; i < 13; i++) {
+      int x = (int)random(400);
+      int y = (int)random(400);
+        explosion((x*-1)-20,(y*-1)-50);
+        explosion((x*-1)-20,y-50);
+        explosion(x-20,y-50);
+        explosion(x-20,(y*-1)-50);
     }//end of for
   }// end of if
+  if (click == 5){ background(random(255)); }
+  if (click == 6) { background(0);}
 }// end of draw
+
 void mousePressed() {
   click++;
-  if (click>4) click=1;
+  if (click >6) click=1;
 }
 void bomb() {
   background(255);
@@ -60,13 +65,11 @@ void matchstick() {
   line(mouseX, mouseY, 30 +mouseX, 40 + mouseY);
   noStroke();
   fill(255, 72, 34);
-  ellipse(mouseX, mouseY, 15, 27);
-}
+  ellipse(mouseX, mouseY, 15, 27);}
   void maze() {
   stroke(246, 139, 0);
   strokeWeight(15);
   line(140, 30, 1050, 30);
-
   line(140, 640, 1170, 640);
   line(1170, 30, 1170, 640);
   line(1050, 30, 1050, 550);
@@ -78,32 +81,30 @@ void matchstick() {
   line(450, 30, 450, 550);
   line(350, 150, 350, 640);
   line(140, 30, 140, 640);
-  line(250, 30, 250, 550);
-}
+  line(250, 30, 250, 550);}
  void explosion(int x, int y){
    fill(random(255),random(209),random(51));
    noStroke();
    beginShape();
-   vertex(192+x,165+y);
-   vertex(220+x,209+y);
-   vertex(234+x,152+y);
-   vertex(235+x,210+y);
-   vertex(278+x,181+y);
-   vertex(248+x,220+y);
-   vertex(292+x,225+y);
-   vertex(245+x,236+y);
-   vertex(277+x,258+y);
-   vertex(234+x,242+y);
-   vertex(255+x,298+y);
-   vertex(227+x,255+y);
-   vertex(213+x,311+y);
-   vertex(212+x,259+y);
-   vertex(171+x,277+y);
-   vertex(206+x,246+y);
-   vertex(136+x,235+y);
-   vertex(192+x,230+y);
-   vertex(165+x,181+y);
-   vertex(202+x,220+y);
-   vertex(192+x,165+y);
-   endShape();
- }
+   vertex(600+x,350+y);
+   vertex(628+x,394+y);
+   vertex(642+x,337+y);
+   vertex(643+x,395+y);
+   vertex(686+x,366+y);
+   vertex(656+x,405+y);
+   vertex(700+x,410+y);
+   vertex(653+x,421+y);
+   vertex(685+x,443+y);
+   vertex(642+x,427+y);
+   vertex(663+x,483+y);
+   vertex(635+x,440+y);
+   vertex(621+x,496+y);
+   vertex(620+x,444+y);
+   vertex(579+x,462+y);
+   vertex(614+x,431+y);
+   vertex(544+x,420+y);
+   vertex(600+x,415+y);
+   vertex(573+x,366+y);
+   vertex(610+x,405+y);
+   vertex(600+x,350+y);
+   endShape();}
