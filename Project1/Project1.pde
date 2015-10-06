@@ -9,28 +9,8 @@ if (click == 1) {
     bomb();
     maze();
     matchstick();}
- if (click == 2) {
-    //step 2: explosion
-    background(21, 13, 79);
-    stroke(255, 174, 26);
-    strokeWeight(2);
-    for ( int x= 25; x<= width-25; x+=60) {
-      for (int y = 15; y<= height-15; y+=40) {
-        line( x, y, width/10, height/8);
-      }//end of y
-    }// end of x
-  }// end of if
-  if (click == 3) {
-    background(21, 13, 79);
-    stroke(255, 241, 41);
-    strokeWeight(1);
-    for (int x=10; x<= width-10; x+= 30) {
-      for (int y=10; y<= height-10; y+=30) {
-        line(x, y, width/3, height/3);
-      }//end of y
-    }//end of x
-  }// end of if
-  if (click == 4){
+
+  if (click == 2){
     background(random(5),random(0),random(25));
     for(int i = 0; i < 13; i++) {
       int x = (int)random(400);
@@ -41,13 +21,13 @@ if (click == 1) {
         explosion(x-20,(y*-1)-50);
     }//end of for
   }// end of if
-  if (click == 5){ background(random(255)); }
-  if (click == 6) { background(0);}
+  if (click == 3){ background(random(255)); }
+  if (click == 4) { background(0);}
 }// end of draw
 
 void mousePressed() {
   click++;
-  if (click >6) click=1;
+  if (click > 4) click=1;
 }
 void bomb() {
   background(255);
