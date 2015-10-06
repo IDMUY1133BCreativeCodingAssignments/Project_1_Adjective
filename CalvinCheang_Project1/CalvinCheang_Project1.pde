@@ -1,7 +1,7 @@
 /*The adjective that I have in mind for this project is probably
-hypnotic, or some word along those lines.*/
+trippy, or some word along those lines.*/
 
-int a,b,c,d,e,f,g,h,i,p,q,x,y;
+int a,b,c,d,e,f,g,h,i,j,k,p,q,x,y;
 int value = 255;
 color rojo = color(255,0,0);
 color shiro = color(255,255,255);
@@ -25,25 +25,46 @@ void setup(){
 }
 
 void draw(){
-  background(0);
+  background(random(0,255),random(0,255),random(0,255)); 
       for(int p=-50;p<1000;p+=200){      //accidentally made a net LOL
-        for(int q=-50;q<1000;q+=200){
-          lines(p,q);
-        }
+       for(int q=-50;q<1000;q+=200){
+         lines(p,q);
+       }
+   }
+   
+   if(key == 'w' || key == 'W'){
+      k-=10;
+      
     }
-  for(int x=50;x<1000; x+=200){        //repeats the targets 9 times
-   for(int y=50; y<1000; y+=200){
+    if(key == 'd' || key == 'D'){
+      j+=10;
+     
+    }
+    if(key == 's' || key == 'S'){
+      k+=10;
+     
+    }
+    if(key == 'a' || key == 'A'){
+      j-=10;
+     
+    }
+   pushMatrix();
+   translate(j,k);
+ for(int x=50;x<4000; x+=200){        //repeats the targets 9 times
+   for(int y=50; y<4000; y+=200){
      target(x,y);
    }
   }
+  popMatrix();
   move();
   mickey();
-  lineMove();
   
 }
 
 void keyPressed(){
- background(random(0,255),random(0,255),random(0,255));    //warning: eplilepsy
+  if(key==32){
+ background(random(0,255),random(0,255),random(0,255));  //warning: eplilepsy
+  }
 }
 
 void mousePressed(){      //toggles color of mickey from white to red
@@ -62,20 +83,8 @@ void lines(int p, int q){    //creates strobe lights
 }
 
 void lineMove(){    //this will be implemented later. supposed to move strobe light back and forth
-  p-=3;
-  q+=3;
-  if(p<=100){
-    p=150;
-  }
-  if(p>=200){
-    p=150;
-  }
-  if(q>=200){
-    q=150;
-  }
-  if(q<=100){
-    q=150;
-  }
+  pushMatrix();
+  
 }
 
 void mickey(){      //creates a mickey mouse shaped icon following mouse
