@@ -1,5 +1,3 @@
-//code for the adjective CALM
-
 void setup(){
   size(600, 600);
   background(200, 170, 190);
@@ -7,15 +5,14 @@ void setup(){
   noFill();
   smooth();
   instructions();
-  waves(-10, 300, 40, 40, 0, 0, PI, PI, 2*PI);
-  
- 
-  
 
 } //setup()
 
 
 void draw(){
+ 
+
+  
  //assign a value to a variable that keeps track of the presses and control with that?
  int cntrl_side = 0;
  int c = 0;
@@ -38,11 +35,12 @@ void draw(){
  int xcircles = 50;
  int ycircles = 100;
  
+ 
  noFill(); 
- circles(xcircles, ycircles, wcircles, hcircles); //calling the initial circle
+ //circles(xcircles, ycircles, wcircles, hcircles); //calling the initial circle
  
  
- if (keyPressed == true){
+ if (keyPressed == true){  //print the waves, with left and right clicks
     if(key == CODED){
       if(keyCode == LEFT){
         waves(-10, 300, 40, 80, 0, 0, PI, PI, 2*PI);
@@ -62,71 +60,94 @@ void draw(){
   
     if(key == CODED){
       if(keyCode == RIGHT){
+        waves(-10, 300, 40, 40, 0, 0, PI, PI, 2*PI);
         waves(-10, 300, 40, 20, 0, 0, PI, PI, 2*PI);
         waves(-10, 300, 40, 10, 0, 0, PI, PI, 2*PI);
 
         }
         
       }
-    if(key == CODED){  
+    if(key == CODED){  //print the circles with down
      
       
-      if(keyCode == DOWN){
-        c++;
+      if(keyCode == DOWN){ //the outer circles
+        //c++;
         for(int p = 0; p < 550; p+= 100){
           circles(xcircles+p, ycircles, wcircles, hcircles);
+          circles(xcircles+p, ycircles, wcircles-10, hcircles-10);
+          circles(xcircles+p, ycircles, wcircles-20, hcircles-20);
+          circles(xcircles+p, ycircles, wcircles-30, hcircles-30);
+          circles(xcircles+p, ycircles, wcircles-40, hcircles-40);
+          circles(xcircles+p, ycircles, wcircles-50, hcircles-50);
+          circles(xcircles+p, ycircles, wcircles-60, hcircles-60);
           
         }
 
       }
       
- 
       }
     
  }
-      if(c > 0){
-        for(int q = 0; q < 550; q+= 100){
-           circles(xcircles+q, ycircles, wcircles-10, hcircles-10);
-           circles(xcircles+q, ycircles, wcircles-20, hcircles-20);
-           circles(xcircles+q, ycircles, wcircles-30, hcircles-30);
-           circles(xcircles+q, ycircles, wcircles-40, hcircles-40);
-           circles(xcircles+q, ycircles, wcircles-50, hcircles-50);
-           circles(xcircles+q, ycircles, wcircles-60, hcircles-60);
-            
-        }
-    }
     
- 
- 
- 
- 
-  /*waves(-10, 300, 40, 80, 150, 0, PI, PI, 2*PI); //calling waves() with x, y coordinates, 
-                               //width, height the end-point, the two angles for
-                              //the first type of arch and the two angles for
-                              //the second type of arch, as parameters*/
+      bg_texture();  //running the function with the dots changing color in background
   
+ if(keyPressed == true){  //if 'n' is pressed, the program will start over
+   if (key == 'n' || key == 'N'){
+     over();
+     }
+  }
   
 }//draw()
 
-void circles(int xCircles, int yCircles, int wCircles, int hCircles){
+void bg_texture(){  //the function with the dots changing color in background
+
+  int columns = width;
+  int rows = height;
+  
+  color a = color(100, 80, 60);
+  color s = color(0, 150, 200);
+  color d = color(40, 200, 80);
+  color f = color(30, 50, 220);
+
+  int[][] myArray = new int[columns][rows];
+  
+  color[] colors = new color[4];
+  colors[0] = color(70, 30, 60);
+  colors[1] = color(0, 200, 220);
+  colors[2] = color(40, 140, 80);
+  colors[3] = color(230, 240, 100);
+  
+  
+  color col = colors[(int)random(0,4)];
+  stroke(col);  //generating the colors of dots randomly 
+  
+  
+  //Assigning values
+  for (int i = 0; i < columns; i++) {
+    for (int k = 0; k < rows; k++) {
+      myArray[i][k] = int(random(255));
+    }
+  }
+  
+  // Draw the points
+  for (int i = 0; i < columns; i+=30) {
+    for (int k = 0; k < rows; k+=30) {
+      point(i, k);
+    }
+  }
+} //bg_texture
+
+void circles(int xCircles, int yCircles, int wCircles, int hCircles){ //custom function for circles
   ellipse(xCircles, yCircles, wCircles, hCircles); 
 }
 
 
-void mov_rect(int w, int h, color rectColor){
+void mov_rect(int w, int h, color rectColor){ //function for the moving rectangles 
+                                              //with the mouse
+ 
   
-  /*float xpos;
-  xpos= mouseX;
-  float ypos;
-  ypos= mouseY;
-  rect(xpos, ypos, 20, 20);*/
-  
-  fill(rectColor);
+  fill(rectColor);  
   pushMatrix();
-  if(mousePressed){ //not working for some reason, trying to 
-                    //move away the rectangles if mouse is pressed
-    translate(800, 800);
-  }
   rotate(atan2((mouseY/3), mouseX/2)); //make an arc with rects
                                         //and mouse movement
   rect(500, 50, w, h);
@@ -135,17 +156,13 @@ void mov_rect(int w, int h, color rectColor){
  
 }
  
-
-
-/*void empty_lines(int z, int c){
+void over(){  //function for starting over
   stroke(255);
-  for(int z = 0; z < width; z=+5){
-    for(int c = 0; c < height; c=+5){
-      rect(z, c, 100, 100);
-    }
-    
-  }
-}*/
+  fill(255);
+  background(200, 170, 190);
+}
+
+
 
 void waves(int x, int y, int w, int h, int e, float a, float b, float c, float d){
              //the function of arcs which loops until a line of wavy arcs is created
@@ -166,43 +183,6 @@ void waves(int x, int y, int w, int h, int e, float a, float b, float c, float d
       ornt = 0; //straightens the arch back up
     }//else
   }//while
-   
-  /*if (keyPressed == true){
-    if(key == CODED){
-      if(keyCode == LEFT){
-        for(e = 0; e < 600; e+= 40){  //increases bounds with every left key to
-                                            //decrease the number of arcs
-          waves(-10, 300, 40, 20, e, 0, PI, PI, 2*PI);
-          break; //break so that the action is done once for every press
-              }//for
-         }//if
-         
-      else if(keyCode == RIGHT){
-        for(e = 0; e < 600; e-= 40){  //decreases bounds with every right key to
-                                            //increase the number of arcs
-          waves(-10, 300, 40, 20, e, 0, PI, PI, 2*PI);
-          break; //break so that the action is done once for every press
-              }//for
-         }//if
-     
-    
-      else if(keyCode == UP){
-        for(h = 20; h < 100; h+= 2){  //increases height with every up key                                
-          waves(-10, 300, 40, h, e, 0, PI, PI, 2*PI); 
-          break; //break so that the action is done once for every press
-              }//for
-        }//if
-        
-      else if(keyCode == DOWN){
-        for(h = 20; h < 100; h-= 2){  //decreases height with every down key                               
-          waves(-10, 300, 40, h, e, 0, PI, PI, 2*PI); 
-          break; //break so that the action is done once for every press
-              }//for
-        }//if
-      }//if
-    }//if
-
-*/
 
    
 }//waves()
@@ -210,24 +190,15 @@ void waves(int x, int y, int w, int h, int e, float a, float b, float c, float d
 
 
 void instructions(){
-  /*println("Please read the instructions below!");
-  println("Press the left key to deconstruct the wave.");
-  println("Press the right key to reconstruct the wave.");
-  println("Press the up key to increase the height of the wave.");
-  println("Press the down key to decrease the height of the wave.");*/
   
   println("Please read the instructions below!");
-  println("Press the left key to add arcs above the one that exists.");
-  println("Press the right key to add arcs below the one that exists.");
-  println("Press the down key to add circles within the initial one and more.");
+  println("If you want to see your shapes changing color, keep the following buttons PRESSED.");
+  println("Press the left key to draw larger waves.");
+  println("Press the right key to draw smaller waves.");
+  println("Press the down key to add circles.");
+  println("Press the up key and move your mouse, to draw rectangles.");
+  println("If you want to start over, press n.");
+  println("Please scroll up for more instructions!");
   
-  /*if(keyPressed){
-    if(key == CODED){
-      if(keyCode == 'b' || keyCode == 'B'){
-        println("Bye.");
-      }//b
-    }//if
-  }//if keyPressed*/
-    
   
 }//instructions()
