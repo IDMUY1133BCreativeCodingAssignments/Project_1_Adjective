@@ -1,6 +1,7 @@
 
 Eye eye1, eye2;
 float e;
+PImage cockroach;
 
 void setup() {
 
@@ -10,12 +11,16 @@ void setup() {
 
   eye1 = new Eye(width/2-140, height/2-160, 70);
   eye2 = new Eye(width/2-40, height/2-160, 70);
+  cockroach = loadImage("cockroach.png");
 }
 
 void draw() {
 
   background(0);
   e = map(mouseX, 0, 700, 100, -100);
+
+  //cockroach as mouse
+  image(cockroach, mouseX-50, mouseY-50, cockroach.width/4, cockroach.height/4);
 
   translate(random(-8, 8), random(-8, 8));
   translate(e, 0);
